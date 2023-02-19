@@ -9,6 +9,10 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Imports: 
-    readr
+    dplyr,
+    glue,
+    purrr,
+    readr,
+    stringr
 URL: https://github.com/jamesbrown1417/ENDIA
 BugReports: https://github.com/jamesbrown1417/ENDIA/issues
