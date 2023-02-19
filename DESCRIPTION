@@ -10,3 +10,5 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Imports: 
     readr
+URL: https://github.com/jamesbrown1417/ENDIA
+BugReports: https://github.com/jamesbrown1417/ENDIA/issues
