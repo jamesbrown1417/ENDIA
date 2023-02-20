@@ -4,13 +4,17 @@
 \alias{get_snapshot_table}
 \title{Load Snapshot Data}
 \usage{
-get_snapshot_table(file_name)
+get_snapshot_table(table_name, cols, include_table_name = FALSE)
 }
 \arguments{
-\item{file_name}{A string indicating the name of the csv table to be read in.}
+\item{table_name}{A string indicating the name of the csv table to be read in.}
+
+\item{cols}{An optional character vector of columns to be included in the tibble.}
+
+\item{include_table_name}{Logical: if TRUE, include the table name as a column in the output tibble.}
 }
 \value{
-A tibble containing the dataset passed to the file_name argument.
+A tibble containing the dataset passed to the table_name argument.
 }
 \description{
 Load Snapshot Data

@@ -13,6 +13,8 @@ Imports:
     glue,
     purrr,
     readr,
+    readxl,
+    rlang,
     stringr
 URL: https://github.com/jamesbrown1417/ENDIA
 BugReports: https://github.com/jamesbrown1417/ENDIA/issues
