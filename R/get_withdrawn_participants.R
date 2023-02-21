@@ -6,6 +6,7 @@
 #' @importFrom rlang .data
 #'
 #' @examples
+#' get_withdrawn_participants()
 get_withdrawn_participants <- function(){
     # Read in tables
     withdrawals = ENDIA::get_snapshot_table("participant_withdrawals")

@@ -4,7 +4,12 @@
 \alias{get_snapshot_table}
 \title{Load Snapshot Data}
 \usage{
-get_snapshot_table(table_name, cols, include_table_name = FALSE)
+get_snapshot_table(
+  table_name,
+  cols,
+  include_table_name = FALSE,
+  guess_max = NULL
+)
 }
 \arguments{
 \item{table_name}{A string indicating the name of the csv table to be read in.}
@@ -12,6 +17,8 @@ get_snapshot_table(table_name, cols, include_table_name = FALSE)
 \item{cols}{An optional character vector of columns to be included in the tibble.}
 
 \item{include_table_name}{Logical: if TRUE, include the table name as a column in the output tibble.}
+
+\item{guess_max}{An optional integer greater than 1000 to increase the number of rows used to guess the type of a column.}
 }
 \value{
 A tibble containing the dataset passed to the table_name argument.

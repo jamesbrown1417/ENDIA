@@ -50,7 +50,8 @@ get_visit_urls <- function(visits = "all") {
             visit_files,
             ENDIA::get_snapshot_table,
             cols = c("structured_participant_id", "id", "participant_id"),
-            include_table_name = TRUE
+            include_table_name = TRUE,
+            .progress = TRUE
         )
 
     # Bind rows together and return

@@ -19,3 +19,6 @@ A tibble containing the dataset passed to the table_name argument.
 \description{
 Load processed data
 }
+\examples{
+get_processed_data_table("mother_ids")
+}

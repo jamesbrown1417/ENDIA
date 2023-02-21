@@ -8,6 +8,7 @@
 #' @export
 #'
 #' @examples
+#' get_processed_data_table("mother_ids")
 get_processed_data_table <-
     function(table_name, cols, include_table_name = FALSE) {
         # Path to the processed data folder on the ENDIA shared drive

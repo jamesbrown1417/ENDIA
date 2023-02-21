@@ -37,7 +37,7 @@ get_snapshot_table <-
         else {
             output_data <- readr::read_csv(
                 file_path,
-                col_select = cols,
+                col_select = dplyr::any_of(cols),
                 progress = FALSE,
                 show_col_types = FALSE,
                 guess_max = max(guess_max, 1000)

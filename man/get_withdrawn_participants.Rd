@@ -12,3 +12,6 @@ A tibble of withdrawn ENDIA participants.
 \description{
 Get withdrawn patients, either T1D diagnoses or explicit withdrawals.
 }
+\examples{
+get_withdrawn_participants()
+}
