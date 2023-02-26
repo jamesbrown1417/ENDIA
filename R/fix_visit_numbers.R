@@ -17,6 +17,9 @@ fix_visit_numbers <- function(visit_col, how = "both") {
     # %notin% function
     `%notin%` = base::Negate(`%in%`)
 
+    # Remove trailing s from visit numbers if present
+    visit_col <- stringr::str_remove(visit_col, "s$")
+
     # Return error if wrong argument is passed
     if (how %notin% c("factor", "zero_pad", "both")) {
         stop("Incorrect option provided to how. Should be one of factor, zero_pad or both")

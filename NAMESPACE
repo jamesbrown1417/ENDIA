@@ -2,6 +2,7 @@
 
 export(fix_visit_numbers)
 export(get_current_site)
+export(get_latest_visit)
 export(get_participant_ids)
 export(get_priority_variables_table)
 export(get_processed_data_table)
