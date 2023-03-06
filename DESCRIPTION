@@ -14,10 +14,12 @@ Imports:
     duckdb,
     glue,
     lubridate,
+    parallelly,
     purrr,
     readr,
     readxl,
     rlang,
-    stringr
+    stringr,
+    vroom
 URL: https://github.com/jamesbrown1417/ENDIA
 BugReports: https://github.com/jamesbrown1417/ENDIA/issues

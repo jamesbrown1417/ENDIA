@@ -16,6 +16,9 @@
 #' get_snapshot_table("mothers")
 get_snapshot_table <-
     function(table_name, cols, include_table_name = FALSE, guess_max = NULL) {
+        # Get number of available cores user has
+        num_cores <- parallelly::availableCores()
+
         # Path to the snapshot folder on the ENDIA shared drive
         snapshot_path = "S:/HealthSciences/SPRH/Paediatrics/Diabetes Research Group/Statistics and Data Management/Data/Snapshot/"
 
@@ -29,7 +32,9 @@ get_snapshot_table <-
                 file_path,
                 progress = FALSE,
                 show_col_types = FALSE,
-                guess_max = max(guess_max, 1000)
+                guess_max = max(guess_max, 1000),
+                num_threads = num_cores,
+                lazy = TRUE
             )
         }
 
@@ -40,7 +45,9 @@ get_snapshot_table <-
                 col_select = dplyr::any_of(cols),
                 progress = FALSE,
                 show_col_types = FALSE,
-                guess_max = max(guess_max, 1000)
+                guess_max = max(guess_max, 1000),
+                num_threads = num_cores,
+                lazy = TRUE
             )
         }
 
