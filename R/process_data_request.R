@@ -47,12 +47,13 @@ process_data_request <- function(data_request_filepath) {
             )
         ) # These are selected by default so no need to select here
 
-    # Visit Numbers to exclude
-    visits_to_exclude <-
+    # Max Visit Number
+    max_visit_number <-
         visits_selected |>
         dplyr::mutate(Visit = ENDIA::fix_visit_numbers(Visit, how = "both")) |>
-        dplyr::filter(is.na(`Requested (X)`)) |>
-        dplyr::pull(Visit)
+        dplyr::filter(!is.na(`Requested (X)`)) |>
+        dplyr::pull(Visit) |>
+        max()
 
     # Get all tables with a variable requested from it--------------------------
 
@@ -100,13 +101,6 @@ process_data_request <- function(data_request_filepath) {
             dplyr::select(dplyr::matches("_id$|^visit_"),
                           dplyr::all_of(requested_variables))
 
-        # Filter visits
-        if ("visit_number" %in% names(table)) {
-            table <-
-                table |>
-                dplyr::filter(!visit_number %in% visits_to_exclude)
-        }
-
         # Return Table
         return(table)
     }
@@ -130,7 +124,8 @@ process_data_request <- function(data_request_filepath) {
     # List of requested variables combined--------------------------------------
     list_of_requested_dataframes_overall <-
         c(list_of_requested_dataframes_clinical,
-          list_of_requested_dataframes_sample)
+          list_of_requested_dataframes_sample,
+          max_visit_number)
 
     # Return List---------------------------------------------------------------
     return(list_of_requested_dataframes_overall)
