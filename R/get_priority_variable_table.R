@@ -11,7 +11,7 @@
 #' get_priority_variables_table("infant_priority_variables")
 #' get_priority_variables_table("maternal_samples", participant_subset = "pp017")
 get_priority_variables_table <-
-    function(table_name, participant_subset = "Overall") {
+    function(table_name, participant_subset = "Overall", sheet = NULL) {
         # %notin% function
         `%notin%` = base::Negate(`%in%`)
 
@@ -44,7 +44,8 @@ get_priority_variables_table <-
         # Read in specified file from path
         output_data <- readxl::read_excel(file_path,
                                           guess_max = 5000,
-                                          progress = FALSE)
+                                          progress = FALSE,
+                                          sheet = sheet)
 
         # Return the table
         return(output_data)
