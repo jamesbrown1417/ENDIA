@@ -17,6 +17,7 @@ Imports:
     readr,
     readxl,
     rlang,
-    stringr
+    stringr,
+    table1
 URL: https://github.com/jamesbrown1417/ENDIA
 BugReports: https://github.com/jamesbrown1417/ENDIA/issues
