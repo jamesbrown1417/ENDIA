@@ -2,7 +2,7 @@
 #'
 #' @param table_name Name of the priority variables table desired
 #' @param participant_subset Name of the participant subset to return results for (defaults to Overall)
-#'
+#' @param sheet Optional sheet to read in from excel spreadsheet
 #' @return A tibble containing the dataset passed to the table_name argument.
 #'
 #' @export

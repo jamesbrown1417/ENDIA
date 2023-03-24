@@ -4,12 +4,18 @@
 \alias{get_priority_variables_table}
 \title{Load priority variables table}
 \usage{
-get_priority_variables_table(table_name, participant_subset = "Overall")
+get_priority_variables_table(
+  table_name,
+  participant_subset = "Overall",
+  sheet = NULL
+)
 }
 \arguments{
 \item{table_name}{Name of the priority variables table desired}
 
 \item{participant_subset}{Name of the participant subset to return results for (defaults to Overall)}
+
+\item{sheet}{Optional sheet to read in from excel spreadsheet}
 }
 \value{
 A tibble containing the dataset passed to the table_name argument.

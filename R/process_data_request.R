@@ -6,13 +6,14 @@
 #' @export
 #'
 #' @examples
-#' process_data_request_form("path/to/data_request.xlsx")
-
-process_data_request_form <- function(data_request_filepath) {
+process_data_request <- function(data_request_filepath) {
     # Load in data request completed forms
-    clinical_variables <- readxl::read_excel(data_request_filepath, sheet = "Data Dictionary Clinical")
-    sample_variables <- readxl::read_excel(data_request_filepath, sheet = "Data Dictionary Samples")
-    visits_selected <- readxl::read_excel(data_request_filepath, sheet = "Visit Selection")
+    clinical_variables <-
+        readxl::read_excel(data_request_filepath, sheet = "Data Dictionary Clinical")
+    sample_variables <-
+        readxl::read_excel(data_request_filepath, sheet = "Data Dictionary Samples")
+    visits_selected <-
+        readxl::read_excel(data_request_filepath, sheet = "Visit Selection")
 
     # Get requested variables---------------------------------------------------
 
@@ -48,7 +49,7 @@ process_data_request_form <- function(data_request_filepath) {
 
     # Visit Numbers to exclude
     visits_to_exclude <-
-    visits_selected |>
+        visits_selected |>
         dplyr::mutate(Visit = ENDIA::fix_visit_numbers(Visit, how = "both")) |>
         dplyr::filter(is.na(`Requested (X)`)) |>
         dplyr::pull(Visit)
@@ -57,14 +58,14 @@ process_data_request_form <- function(data_request_filepath) {
 
     # Clinical
     clinical_spreadsheets <-
-    clinical_variables |>
+        clinical_variables |>
         dplyr::filter(!is.na(`Requested (X)`)) |>
         dplyr::distinct(Spreadsheet) |>
         dplyr::pull(Spreadsheet)
 
     # Samples
     sample_spreadsheets <-
-    sample_variables |>
+        sample_variables |>
         dplyr::filter(!is.na(`Requested (X)`)) |>
         dplyr::distinct(Spreadsheet) |>
         dplyr::pull(Spreadsheet)
@@ -73,7 +74,7 @@ process_data_request_form <- function(data_request_filepath) {
     get_vars <- function(df, vars_requested) {
         # Filter to vars requested for table
         requested_variables <-
-        vars_requested |>
+            vars_requested |>
             dplyr::filter(df == Spreadsheet) |>
             dplyr::pull(var_name)
 
@@ -97,7 +98,7 @@ process_data_request_form <- function(data_request_filepath) {
         table <-
             table |>
             dplyr::select(dplyr::matches("_id$|^visit_"),
-                   dplyr::all_of(requested_variables))
+                          dplyr::all_of(requested_variables))
 
         # Filter visits
         if ("visit_number" %in% names(table)) {
@@ -114,12 +115,16 @@ process_data_request_form <- function(data_request_filepath) {
 
     # Clinical
     list_of_requested_dataframes_clinical <-
-        purrr::map(clinical_spreadsheets, get_vars, clinical_variables_requested) |>
+        purrr::map(clinical_spreadsheets,
+                   get_vars,
+                   clinical_variables_requested) |>
         purrr::set_names(clinical_spreadsheets)
 
     # Samples
     list_of_requested_dataframes_sample <-
-        purrr::map(sample_spreadsheets, get_vars, sample_variables_requested) |>
+        purrr::map(sample_spreadsheets,
+                   get_vars,
+                   sample_variables_requested) |>
         purrr::set_names(sample_spreadsheets)
 
     # List of requested variables combined--------------------------------------
