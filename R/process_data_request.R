@@ -12,8 +12,6 @@ process_data_request <- function(data_request_filepath) {
         readxl::read_excel(data_request_filepath, sheet = "Data Dictionary Clinical")
     sample_variables <-
         readxl::read_excel(data_request_filepath, sheet = "Data Dictionary Samples")
-    visits_selected <-
-        readxl::read_excel(data_request_filepath, sheet = "Visit Selection")
 
     # Get requested variables---------------------------------------------------
 
@@ -46,14 +44,6 @@ process_data_request <- function(data_request_filepath) {
                 "father_id"
             )
         ) # These are selected by default so no need to select here
-
-    # Max Visit Number
-    max_visit_number <-
-        visits_selected |>
-        dplyr::mutate(Visit = ENDIA::fix_visit_numbers(Visit, how = "both")) |>
-        dplyr::filter(!is.na(`Requested (X)`)) |>
-        dplyr::pull(Visit) |>
-        max()
 
     # Get all tables with a variable requested from it--------------------------
 
@@ -124,8 +114,7 @@ process_data_request <- function(data_request_filepath) {
     # List of requested variables combined--------------------------------------
     list_of_requested_dataframes_overall <-
         c(list_of_requested_dataframes_clinical,
-          list_of_requested_dataframes_sample,
-          max_visit_number)
+          list_of_requested_dataframes_sample)
 
     # Return List---------------------------------------------------------------
     return(list_of_requested_dataframes_overall)
