@@ -12,6 +12,7 @@ Imports:
     dplyr,
     glue,
     lubridate,
+    openxlsx,
     parallelly,
     purrr,
     readr,
