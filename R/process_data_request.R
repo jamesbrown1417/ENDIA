@@ -128,11 +128,12 @@ process_data_request <- function(data_request_filepath) {
     filter_visits <- function(df) {
         if ("visit_number" %in% names(df)) {
             df |>
-                mutate(visit_number = fix_visit_numbers(how = "zero_pad")) |>
-                filter(visit_number %in% visits_requested)
+                dplyr::mutate(visit_number = ENDIA::fix_visit_numbers(visit_number, how = "both")) |>
+                dplyr::filter(visit_number %in% visits_requested) |>
+                dplyr::arrange(structured_participant_id, visit_number)
         }
         else {
-            df
+            df |> dplyr::arrange(structured_participant_id)
         }
     }
 
