@@ -21,7 +21,7 @@ process_data_request <- function(data_request_filepath) {
     visits_requested <-
         visits_selected |>
         dplyr::filter(!is.na(`Requested (X)`)) |>
-        pull(visit)
+        pull(Visit)
 
     # Clinical
     clinical_variables_requested <-
