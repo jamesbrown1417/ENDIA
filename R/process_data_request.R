@@ -21,7 +21,8 @@ process_data_request <- function(data_request_filepath) {
     visits_requested <-
         visits_selected |>
         dplyr::filter(!is.na(`Requested (X)`)) |>
-        pull(Visit)
+        dplyr::pull(Visit) |>
+        ENDIA::fix_visit_numbers(how = "both")
 
     # Clinical
     clinical_variables_requested <-
