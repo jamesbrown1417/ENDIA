@@ -10,10 +10,18 @@ process_data_request <- function(data_request_filepath) {
     # Load in data request completed forms
     clinical_variables <-
         readxl::read_excel(data_request_filepath, sheet = "Data Dictionary Clinical")
+    visits_selected <-
+        readxl::read_excel(data_request_filepath, sheet = "Visit Selection")
     sample_variables <-
         readxl::read_excel(data_request_filepath, sheet = "Data Dictionary Samples")
 
     # Get requested variables---------------------------------------------------
+
+    # Visits
+    visits_requested <-
+        visits_selected |>
+        dplyr::filter(!is.na(`Requested (X)`)) |>
+        pull(visit)
 
     # Clinical
     clinical_variables_requested <-
@@ -115,6 +123,22 @@ process_data_request <- function(data_request_filepath) {
     list_of_requested_dataframes_overall <-
         c(list_of_requested_dataframes_clinical,
           list_of_requested_dataframes_sample)
+
+    # Create function to filter visits based on selected range
+    filter_visits <- function(df) {
+        if ("visit_number" %in% names(df)) {
+            df |>
+                mutate(visit_number = fix_visit_numbers(how = "zero_pad")) |>
+                filter(visit_number %in% visits_requested)
+        }
+        else {
+            df
+        }
+    }
+
+    # Apply function to filter based on visit requested
+    list_of_requested_dataframes_overall <-
+        map(list_of_requested_dataframes_overall, filter_visits)
 
     # Return List---------------------------------------------------------------
     return(list_of_requested_dataframes_overall)
