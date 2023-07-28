@@ -140,7 +140,134 @@ process_data_request <- function(data_request_filepath) {
 
     # Apply function to filter based on visit requested
     list_of_requested_dataframes_overall <-
-        map(list_of_requested_dataframes_overall, filter_visits)
+        purrr::map(list_of_requested_dataframes_overall, filter_visits)
+
+    # Separate maternal priority variables into static and dynamic variables if it exists
+    if ("maternal_priority_variables" %in% names(list_of_requested_dataframes_overall)) {
+
+    list_of_static_variables <-
+        c("endia_pregnancy_number_gestational",
+          "endia_pregnancy_number_biological",
+          "maternal_dob",
+          "maternal_birth_country",
+          "maternal_education",
+          "maternal_suburb",
+          "maternal_postcode",
+          "IRSAD_Decile",
+          "IRSAD_Percentile",
+          "IRSD_Decile",
+          "IRSD_Percentile",
+          "monash_remoteness_category",
+          "ABS_remoteness_classification",
+          "confirmed_due_date",
+          "calculated_conception_date",
+          "maternal_age_at_conception",
+          "assisted_conception",
+          "assisted_conception_categories",
+          "maternal_med_history_t2d",
+          "maternal_med_history_gestational_diabetes",
+          "maternal_med_history_coeliac",
+          "maternal_med_history_kidney_disease",
+          "maternal_med_history_eye_disease",
+          "gravida",
+          "parity",
+          "nulliparous",
+          "prior_pregnancies_lt_20_weeks",
+          "prior_pregnancies_lt_37_weeks",
+          "prior_pregnancies_gt_37_weeks",
+          "prior_living_biological_children",
+          "prev_perinatal_deaths",
+          "perinatal_death_category",
+          "prev_multiple_births",
+          "prev_births_GA_weeks_1",
+          "prev_births_prev_birth_date_1",
+          "prev_births_mode_of_birth_1",
+          "prev_births_GA_weeks_2",
+          "prev_births_prev_birth_date_2",
+          "prev_births_mode_of_birth_2",
+          "prev_births_GA_weeks_3",
+          "prev_births_prev_birth_date_3",
+          "prev_births_mode_of_birth_3",
+          "prev_births_GA_weeks_4",
+          "prev_births_prev_birth_date_4",
+          "prev_births_mode_of_birth_4",
+          "prev_births_GA_weeks_5",
+          "prev_births_prev_birth_date_5",
+          "prev_births_mode_of_birth_5",
+          "prev_births_GA_weeks_6",
+          "prev_births_prev_birth_date_6",
+          "prev_births_mode_of_birth_6",
+          "prev_births_GA_weeks_7",
+          "prev_births_prev_birth_date_7",
+          "prev_births_mode_of_birth_7",
+          "prev_births_GA_weeks_8",
+          "prev_births_prev_birth_date_8",
+          "prev_births_mode_of_birth_8",
+          "prev_births_GA_weeks_9",
+          "prev_births_prev_birth_date_9",
+          "prev_births_mode_of_birth_9",
+          "t1d_management_mdi",
+          "t1d_management_pump",
+          "t1d_management_mdi_pump",
+          "t1d_management_oral_metformin",
+          "t1d_management_unknown",
+          "recapture_diabetes_management_cgm_at_conception",
+          "recapture_diabetes_management_cgm_commenced_during_pregnancy",
+          "recapture_diabetes_management_cgm_gestation_started",
+          "gdm",
+          "ga_at_gdm_onset",
+          "gdm_management_diet",
+          "gdm_management_oral_meds",
+          "gdm_management_insulin",
+          "gdm_management_unknown",
+          "pre_existing_thyroid_problems",
+          "pre_existing_autoimmune_disorder",
+          "proband_mother",
+          "proband_sibling",
+          "proband_donor_oocyte",
+          "proband_mother_diagnosis_date",
+          "proband_sibling_1_diagnosis_date",
+          "proband_sibling_2_diagnosis_date",
+          "maternal_HLA_6DR_gestational",
+          "maternal_HLA_1_gestational",
+          "maternal_HLA_2_gestational",
+          "maternal_IL2RA_gestational",
+          "maternal_HLA_6DR_biological",
+          "maternal_HLA_1_biological",
+          "maternal_HLA_2_biological",
+          "maternal_IL2RA_biological")
+
+    # Get static maternal variables
+    static_maternal <-
+        list_of_requested_dataframes_overall$maternal_priority_variables |>
+        dplyr::select(structured_participant_id, gestational_mother_id, biological_mother_id, dplyr::any_of(list_of_static_variables))
+
+    static_maternal <-
+        static_maternal |>
+        dplyr::mutate(missing_count = base::rowSums(base::is.na(static_maternal))) |>
+        dplyr::arrange(structured_participant_id, (missing_count)) |>
+        dplyr::group_by(structured_participant_id) |>
+        dplyr::slice_head(n = 1) |>
+        dplyr::ungroup() |>
+        dplyr::select(-missing_count)
+
+    # Get dynamic maternal variables
+    dynamic_maternal <-
+        list_of_requested_dataframes_overall$maternal_priority_variables |>
+        dplyr::select(-dplyr::any_of(list_of_static_variables))
+
+    # Add to list
+    list_of_requested_dataframes_overall$maternal_priority_variables_static <- static_maternal
+    list_of_requested_dataframes_overall$maternal_priority_variables_dynamic <- dynamic_maternal
+
+    # Remove the original maternal priority variables
+    list_of_requested_dataframes_overall$maternal_priority_variables <- NULL
+
+    # Reorder the list
+    num_elements <- base::length(list_of_requested_dataframes_overall)
+    new_order <- c((num_elements-1):num_elements, 1:(num_elements-2))
+    list_of_requested_dataframes_overall <- list_of_requested_dataframes_overall[new_order]
+    }
 
     # Return List---------------------------------------------------------------
     return(list_of_requested_dataframes_overall)
