@@ -257,8 +257,8 @@ process_data_request <- function(data_request_filepath) {
         dplyr::select(-dplyr::any_of(list_of_static_variables))
 
     # Add to list
-    list_of_requested_dataframes_overall$maternal_priority_variables_static <- static_maternal
-    list_of_requested_dataframes_overall$maternal_priority_variables_dynamic <- dynamic_maternal
+    list_of_requested_dataframes_overall$mat_priority_vars_static <- static_maternal
+    list_of_requested_dataframes_overall$mat_priority_vars_dynamic <- dynamic_maternal
 
     # Remove the original maternal priority variables
     list_of_requested_dataframes_overall$maternal_priority_variables <- NULL
