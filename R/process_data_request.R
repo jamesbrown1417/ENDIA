@@ -168,6 +168,7 @@ process_data_request <- function(data_request_filepath) {
           "monash_remoteness_category_enrol",
           "ABS_remoteness_classification_enrol",
           "pre_preg_bmi",
+          "gestational_weight_gain",
           "maternal_preconception_smoking",
           "maternal_smoking_during_preg_any",
           "confirmed_due_date",
