@@ -47,6 +47,7 @@ get_participant_ids <-
                 gestational_mother_ids |>
                 dplyr::filter(.data$gestational_mother == 1) |>
                 dplyr::select(.data$structured_participant_id,
+                              endia_pregnancy_number_gestational = .data$endia_preg_num_gestational,
                               gestational_mother_id = .data$mother_id)
         }
         # If not specified return NULL
@@ -65,6 +66,7 @@ get_participant_ids <-
                 biological_mother_ids |>
                 dplyr::filter(.data$biological_mother == 1) |>
                 dplyr::select(.data$structured_participant_id,
+                              endia_pregnancy_number_biological = .data$endia_preg_num_biological,
                               biological_mother_id = .data$mother_id)
         }
         # If not specified return NULL

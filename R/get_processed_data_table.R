@@ -3,6 +3,7 @@
 #' @param table_name Name of the processed data table desired.
 #' @param cols An optional character vector of columns to be included in the tibble.
 #' @param include_table_name Logical: if TRUE, include the table name as a column in the output tibble.
+#' @param sheet Which sheet to return the data for if file is an excel spreadhseet.
 #'
 #' @return A tibble containing the dataset passed to the table_name argument.
 #' @export

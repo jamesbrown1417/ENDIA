@@ -146,9 +146,7 @@ process_data_request <- function(data_request_filepath) {
     if ("maternal_priority_variables" %in% names(list_of_requested_dataframes_overall)) {
 
     list_of_static_variables <-
-        c("endia_pregnancy_number_gestational",
-          "endia_pregnancy_number_biological",
-          "maternal_dob",
+        c("maternal_dob",
           "maternal_birth_country",
           "maternal_education",
           "maternal_suburb",
@@ -252,7 +250,12 @@ process_data_request <- function(data_request_filepath) {
     # Get static maternal variables
     static_maternal <-
         list_of_requested_dataframes_overall$maternal_priority_variables |>
-        dplyr::select(structured_participant_id, gestational_mother_id, biological_mother_id, dplyr::any_of(list_of_static_variables))
+        dplyr::select(structured_participant_id,
+                      gestational_mother_id,
+                      biological_mother_id,
+                      endia_pregnancy_number_gestational,
+                      endia_pregnancy_number_biological,
+                      dplyr::any_of(list_of_static_variables))
 
     static_maternal <-
         static_maternal |>
