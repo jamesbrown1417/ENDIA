@@ -49,7 +49,7 @@ get_visit_urls <- function(visits = "all") {
         purrr::map(
             visit_files,
             ENDIA::get_snapshot_table,
-            cols = c("structured_participant_id", "id", "participant_id"),
+            cols = c("structured_participant_id", "id", "visit_date", "participant_id"),
             include_table_name = TRUE,
             .progress = TRUE
         )
@@ -72,45 +72,11 @@ get_visit_urls <- function(visits = "all") {
     all_visits |>
         dplyr::select(.data$structured_participant_id,
                       visit_number = .data$table_name,
+                      visit_date = .data$visit_date,
                       .data$visit_url)
 
     # Make visit number an ordered factor
-    all_visits$visit_number <- factor(
-        all_visits$visit_number,
-        levels =
-            c(
-                "t1",
-                "t2",
-                "t3",
-                "b1",
-                "b2",
-                "v1",
-                "v2",
-                "v3",
-                "v4",
-                "v5",
-                "v6",
-                "v7",
-                "v8",
-                "v9",
-                "v10",
-                "v11",
-                "v12",
-                "v13",
-                "v14",
-                "v15",
-                "v16",
-                "v17",
-                "v18",
-                "v19",
-                "v20",
-                "v21",
-                "v22",
-                "v23",
-                "v24"
-            ),
-        ordered = TRUE
-    )
+    all_visits$visit_number <- ENDIA::fix_visit_numbers(all_visits$visit_number, how = "both")
 
     # Order the tibble by structured participant ID and visit number and return
     all_visits |> dplyr::arrange(.data$structured_participant_id, .data$visit_number)

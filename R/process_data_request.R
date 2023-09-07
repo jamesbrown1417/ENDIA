@@ -97,7 +97,7 @@ process_data_request <- function(data_request_filepath) {
         # Select variables
         table <-
             table |>
-            dplyr::select(dplyr::matches("_id$|^visit_"),
+            dplyr::select(dplyr::matches("_id$|pregnancy_number|^visit_"),
                           dplyr::all_of(requested_variables))
 
         # Return Table
@@ -165,6 +165,8 @@ process_data_request <- function(data_request_filepath) {
           "IRSD_Percentile_enrol",
           "monash_remoteness_category_enrol",
           "ABS_remoteness_classification_enrol",
+          "maternal_height",
+          "pre_pregnancy_weight",
           "pre_preg_bmi",
           "gestational_weight_gain",
           "maternal_preconception_smoking",
@@ -253,6 +255,7 @@ process_data_request <- function(data_request_filepath) {
         dplyr::select(structured_participant_id,
                       gestational_mother_id,
                       biological_mother_id,
+                      infant_id,
                       endia_pregnancy_number_gestational,
                       endia_pregnancy_number_biological,
                       dplyr::any_of(list_of_static_variables))

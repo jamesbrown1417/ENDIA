@@ -4,7 +4,12 @@
 \alias{get_processed_data_table}
 \title{Load processed data}
 \usage{
-get_processed_data_table(table_name, cols, include_table_name = FALSE)
+get_processed_data_table(
+  table_name,
+  cols,
+  include_table_name = FALSE,
+  sheet = NULL
+)
 }
 \arguments{
 \item{table_name}{Name of the processed data table desired.}
