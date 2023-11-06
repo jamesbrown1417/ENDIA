@@ -6,21 +6,15 @@
 
 # Libraries
 library(shiny)
+library(DT)
 
-# Read in data
-latest_visit <-
-    ENDIA::get_latest_visit() |>
-    dplyr::mutate(site = stringr::str_extract(structured_participant_id, "[A-Z]*\\-[A-Z]*\\-[A-Z]*")) |>
-    dplyr::relocate(site, .after = structured_participant_id)
-
-# All visits
-all_visits <-
-    ENDIA::get_visit_urls() |>
-    dplyr::mutate(site = stringr::str_extract(structured_participant_id, "[A-Z]*\\-[A-Z]*\\-[A-Z]*")) |>
-    dplyr::relocate(site, .after = structured_participant_id)
+# Read in data------------------------------------------------------------------
 
 # Get current sites
 current_sites <- ENDIA::get_current_site()
+
+# Get antibody data
+antibody_data <- ENDIA::get_processed_data_table()
 
 # Create a function to plot a participants visits over time
 plot_participant_visits <- function(participant_id) {
@@ -98,41 +92,7 @@ ui <- shiny::navbarPage(
 #                                                          #
 ##%######################################################%##
 
-server <- function(input, output) {
-    # Render participant visits plot
-    output$participant_visits <- shiny::renderPlot({
-        plot_participant_visits(participant_id = paste0(
-            input$participant_site,
-            "-",
-            stringr::str_pad(
-                as.character(input$participant_id),
-                width = 3,
-                side = "left",
-                pad = "0"
-            )
-        ))
-    })
 
-    # Render participant visits table
-    output$participant_visits_table <- DT::renderDataTable({
-        all_visits |>
-            dplyr::filter(
-                structured_participant_id == paste0(
-                    input$participant_site,
-                    "-",
-                    stringr::str_pad(
-                        as.character(input$participant_id),
-                        width = 3,
-                        side = "left",
-                        pad = "0"
-                    )
-                )
-            ) |>
-            dplyr::select(visit_date, visit_number, site) |>
-            DT::datatable(rownames = FALSE,
-                          options = list(pageLength = 50))
-    })
-}
 
 ##%######################################################%##
 #                                                          #
