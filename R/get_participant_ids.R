@@ -10,7 +10,7 @@
 #' @examples
 #' get_participant_ids(who = c("gestational_mother", "biological_mother"))
 get_participant_ids <-
-    function(who = c("gestational_mother", "biological_mother", "infant", "father")) {
+    function(who = c("gestational_mother", "biological_mother", "infant", "sibling", "father")) {
         # Get valid options list
         who_valid_options <-
             base::match.arg(
@@ -19,6 +19,7 @@ get_participant_ids <-
                     "gestational_mother",
                     "biological_mother",
                     "infant",
+                    "sibling",
                     "father"
                 ),
                 several.ok = TRUE
@@ -31,7 +32,7 @@ get_participant_ids <-
             error_message = base::paste(
                 'One or more incorrect options provided to who:',
                 problem_variables_string,
-                '\n who should be one of gestational_mother, biological_mother, infant, father'
+                '\n who should be one of gestational_mother, biological_mother, infant, father or sibling'
             )
             base::stop(error_message)
         }
@@ -86,6 +87,50 @@ get_participant_ids <-
             infant_ids <- NULL
         }
 
+        # Sibling IDs
+        if ("sibling" %in% who_valid_options) {
+            # Get table from processed data folder
+            sibling_ids <-
+                ENDIA::get_processed_data_table("sibling_ids") |>
+                tidyr::separate(
+                    .data$family,
+                    into = c(
+                        "structured_participant_id_1",
+                        "structured_participant_id_2",
+                        "structured_participant_id_3",
+                        "structured_participant_id_4",
+                        "structured_participant_id_5"
+                    ),
+                    sep = ","
+                ) |>
+                tidyr::pivot_longer(
+                    cols = c(
+                        "structured_participant_id_1",
+                        "structured_participant_id_2",
+                        "structured_participant_id_3",
+                        "structured_participant_id_4",
+                        "structured_participant_id_5"
+                    ),
+                    values_to = "structured_participant_id"
+                ) |>
+                dplyr::filter(!is.na(.data$structured_participant_id))
+
+            # Select structured participant id and sibling id
+            sibling_ids <-
+                sibling_ids |>
+                dplyr::mutate(structured_participant_id = stringr::str_trim(.data$structured_participant_id)) |>
+                dplyr::select(.data$structured_participant_id, .data$sibling_id) |>
+                dplyr::arrange(.data$structured_participant_id, .data$sibling_id) |>
+                dplyr::group_by(.data$structured_participant_id) |>
+                dplyr::mutate(row_num = dplyr::row_number()) |>
+                tidyr::pivot_wider(names_from = .data$row_num, values_from = .data$sibling_id, names_prefix = "sibling_id_") |>
+                dplyr::ungroup()
+        }
+        # If not specified return NULL
+        else {
+            sibling_ids <- NULL
+        }
+
         # Father IDs
         if ("father" %in% who_valid_options) {
             # Get table from processed data folder
@@ -108,6 +153,7 @@ get_participant_ids <-
                 "gestational_mother_ids" = gestational_mother_ids,
                 "biological_mother_ids" = biological_mother_ids,
                 "infant_ids" = infant_ids,
+                "sibling_ids" = sibling_ids,
                 "father_ids" = father_ids
             )
 
