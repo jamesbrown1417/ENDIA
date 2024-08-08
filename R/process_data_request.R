@@ -169,6 +169,7 @@ process_data_request <- function(data_request_filepath) {
           "pre_pregnancy_weight",
           "pre_preg_bmi",
           "gestational_weight_gain",
+          "GA_at_gestational_weight_gain",
           "maternal_preconception_smoking",
           "maternal_smoking_during_preg_any",
           "confirmed_due_date",
