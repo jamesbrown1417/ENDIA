@@ -25,7 +25,7 @@ process_data_request <- function(data_request_filepath) {
         ENDIA::fix_visit_numbers(how = "both")
 
     # If no visits are selected, return all visits
-    if (is.null(nrow(visits_requested))) {
+    if (length(visits_requested) == 0 | is.null(visits_requested)) {
         visits_requested <-
             ENDIA::fix_visit_numbers(c(
             "v1",
