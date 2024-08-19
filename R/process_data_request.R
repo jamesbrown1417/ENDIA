@@ -306,7 +306,7 @@ process_data_request <- function(data_request_filepath) {
     dynamic_maternal <-
         list_of_requested_dataframes_overall$maternal_priority_variables |>
         dplyr::select(-dplyr::any_of(list_of_static_variables)) |>
-        dplyr::select(dplyr::any_of(  select(
+        dplyr::select(dplyr::any_of(c(
             "structured_participant_id",
             "gestational_mother_id",
             "endia_pregnancy_number_gestational",
